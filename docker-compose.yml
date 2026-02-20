@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  app-backend:
+    build: ./server
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb+srv://dharaneeswar07_db_user:DFdF8RjkIRvbD5Dt@cluster0.7esorcz.mongodb.net/smart_agri_db?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=supersecret_agri_key_change_in_prod_12345
+      - PORT=5000
+    depends_on:
+      - mongo-db
+  app-frontend:
+    build: ./client
+    ports:
+      - "5173:5173"
+    depends_on:
+      - app-backend
+  mongo-db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+volumes:
+  mongo-data:

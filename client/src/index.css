@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --agri-bg: #f0fdf4;
+    --agri-text: #0f172a;
+    --agri-muted: #64748b;
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(0, 0, 0, 0.1);
+  }
+  .dark {
+    --agri-bg: #0f172a;
+    --agri-text: #ffffff;
+    --agri-muted: #94a3b8;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+  body {
+    @apply bg-agri-bg text-agri-text font-sans antialiased transition-colors duration-300;
+  }
+  .dark body {
+    background-image:
+      radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+  :root body {
+    background-image:
+      radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-glass rounded-xl transition-all duration-300;
+  }
+  .glass-panel:hover {
+    @apply bg-white/10 border-white/20 shadow-neon;
+  }
+  .glass-input {
+    @apply bg-white/5 border border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-agri-neon/50 text-white placeholder-gray-400 backdrop-blur-sm transition-all;
+  }
+  .btn-primary {
+    @apply bg-gradient-to-r from-agri-green to-agri-neon text-gray-900 font-bold py-2 px-6 rounded-lg hover:shadow-neon hover:scale-105 transition-all duration-300 active:scale-95;
+  }
+}
