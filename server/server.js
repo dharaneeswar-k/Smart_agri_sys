@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*", 
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
@@ -64,10 +64,14 @@ cron.schedule('0 0 * * *', async () => {
     console.log('Running daily market data sync...');
     await MarketDataService.syncDatabase();
 });
-if (process.env.DATA_GOV_API_KEY) {
-    setTimeout(() => {
-        MarketDataService.syncDatabase().catch(console.error);
-    }, 5000); 
+if (process.env.DATA_GOV_API_KEY && false) { // Disabled startup sync to avoid 429 errors
+    setTimeout(async () => {
+        try {
+            await MarketDataService.syncDatabase();
+        } catch (error) {
+            console.error('Initial market data sync failed:', error.message);
+        }
+    }, 5000);
 }
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

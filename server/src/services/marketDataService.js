@@ -46,6 +46,12 @@ class MarketDataService {
         }
     }
     async syncDatabase() {
+        const needsSync = await this.shouldSync();
+        if (!needsSync) {
+            console.log('Skipping market data sync: Data for today is already present in the database.');
+            return { success: true, message: 'Data already up to date' };
+        }
+
         const records = await this.fetchLivePrices();
         if (!records || records.length === 0) return { success: false, message: 'No records fetched' };
         let addedCount = 0;
@@ -69,7 +75,7 @@ class MarketDataService {
                         .replace(/_/g, ' ');
                     const commodityName = commodityRaw.charAt(0).toUpperCase() + commodityRaw.slice(1);
                     const marketName = record.district || record.state || 'Unknown Market';
-                    const saved = await this.savePricePoint(marketName, commodityName, parseFloat(priceVal) / 100); 
+                    const saved = await this.savePricePoint(marketName, commodityName, parseFloat(priceVal) / 100);
                     if (saved) recordAdded = true;
                 }
                 if (recordAdded) addedCount++;
@@ -78,6 +84,23 @@ class MarketDataService {
         console.log(`Synced ${addedCount} new price records from data.gov.in`);
         return { success: true, added: addedCount };
     }
+
+    async shouldSync() {
+        try {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Check if we have any records for today
+            const count = await CropPrice.countDocuments({
+                date: { $gte: today }
+            });
+
+            return count === 0;
+        } catch (error) {
+            console.error('Error checking sync status:', error);
+            return true; // Sync if we can't be sure
+        }
+    }
     async savePricePoint(marketName, cropName, pricePerKg) {
         let marketDoc = await Market.findOne({ name: new RegExp(marketName, 'i') });
         if (!marketDoc) {
@@ -85,8 +108,8 @@ class MarketDataService {
                 name: marketName,
                 location: {
                     type: 'Point',
-                    coordinates: [78.9629, 20.5937], 
-                    address: marketName 
+                    coordinates: [78.9629, 20.5937],
+                    address: marketName
                 }
             });
         }
@@ -119,14 +142,14 @@ class MarketDataService {
             const [day, month, year] = arrival_date.split('/');
             dateObj = new Date(`${year}-${month}-${day}`);
         }
-        dateObj.setHours(0, 0, 0, 0); 
+        dateObj.setHours(0, 0, 0, 0);
         let marketDoc = await Market.findOne({ name: new RegExp(market, 'i') });
         if (!marketDoc) {
             marketDoc = await Market.create({
                 name: market,
                 location: {
                     type: 'Point',
-                    coordinates: [78.9629, 20.5937], 
+                    coordinates: [78.9629, 20.5937],
                     address: record.district || record.state || 'India'
                 }
             });

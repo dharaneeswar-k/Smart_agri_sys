@@ -1,18 +1,18 @@
 export default {
     content: [
         "./index.html",
-        "./src*.{js,ts,jsx,tsx}",
+        "./src/**/*.{js,ts,jsx,tsx}",
     ],
-    darkMode: 'class', 
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {
                 agri: {
-                    bg: 'var(--agri-bg)',      
-                    card: 'var(--glass-bg)',   
-                    border: 'var(--glass-border)', 
-                    text: 'var(--agri-text)',  
-                    muted: 'var(--agri-muted)', 
+                    bg: 'var(--agri-bg)',
+                    card: 'var(--glass-bg)',
+                    border: 'var(--glass-border)',
+                    text: 'var(--agri-text)',
+                    muted: 'var(--agri-muted)',
                     dark: '#0f172a',
                     green: '#10b981',
                     neon: '#34d399',

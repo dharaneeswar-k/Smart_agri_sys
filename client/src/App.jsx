@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ThemeProvider } from './context/ThemeContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
@@ -19,12 +20,12 @@ const AuthenticatedLayout = () => {
         </MainLayout>
     );
 };
-import { ThemeProvider } from './context/ThemeContext';
+
 function App() {
     return (
         <ThemeProvider>
             <Router>
-                {}
+                { }
                 <ToastContainer
                     position="top-right"
                     autoClose={3000}
@@ -35,29 +36,29 @@ function App() {
                     pauseOnFocusLoss
                     draggable
                     pauseOnHover
-                    theme="dark" 
+                    theme="dark"
                 />
                 <Routes>
-                    {}
+                    { }
                     <Route path='/' element={
                         <>
-                            {}
+                            { }
                             <Landing />
                         </>
                     } />
                     <Route path='/login' element={
                         <>
-                            {}
+                            { }
                             <Login />
                         </>
                     } />
                     <Route path='/register' element={
                         <>
-                            {}
+                            { }
                             <Register />
                         </>
                     } />
-                    {}
+                    { }
                     <Route element={<AuthenticatedLayout />}>
                         <Route path='/dashboard' element={<Dashboard />} />
                         <Route path='/analytics' element={<MarketAnalytics />} />
